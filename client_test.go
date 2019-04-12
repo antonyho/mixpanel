@@ -2,18 +2,23 @@ package mixpanel
 
 import (
 	"github.com/spf13/viper"
-	"os"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestClient_Track(t *testing.T) {
-	os.Setenv("MIXPANEL_TOKEN", "ac347c9880fa89b7e51a7136b83c81e")
 	viper.SetEnvPrefix("mixpanel")
 	viper.AutomaticEnv()
-	c := NewClient(viper.Get("token").(string))
+	viper.AllowEmptyEnv(true)
+	token := viper.Get("token").(string)
+	if token == "" {
+		t.Fatalf("Mixpanel Token is not provided for the test. You can add MIXPANEL_TOKEN to your environment variable for the test.")
+	}
+	client := NewClient(token)
+
 	props := map[string]string{"test": "testing"}
 	event := NewEvent("go-test", props)
 	event.DistinctID = "1"
-	result, err := c.Track(event)
-	t.Logf("%v %v", result, err)
+	_, err := client.Track(event)
+	assert.NoError(t, err)
 }
