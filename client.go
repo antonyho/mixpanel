@@ -2,8 +2,8 @@ package mixpanel
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin/json"
 	"io/ioutil"
 	"net/http"
 )
@@ -20,9 +20,9 @@ const (
 
 type Event struct {
 	Title string `json:"event"`
-	Properties map[string]string `json:"properties"`
+	Properties map[string]interface{} `json:"properties"`
 	DistinctID string `json:"-"`
-	Time string `json:"-"`
+	Time uint `json:"-"`
 	IP string `json:"-"`
 	InsertID string `json:"-"`
 	GroupKey string `json:"-"`
@@ -35,7 +35,7 @@ func (e Event) JSON() string {
 	if e.DistinctID != "" {
 		e.Properties["distinct_id"] = e.DistinctID
 	}
-	if e.Time != "" {
+	if e.Time != 0 {
 		e.Properties["time"] = e.Time
 	}
 	if e.IP != "" {
@@ -54,8 +54,9 @@ func (e Event) JSON() string {
 	return string(j)
 }
 
-func NewEvent(event string, props map[string]string) *Event {
-	// TODO - Check props keys and find any keyword which violate with pre-defined keywards
+func NewEvent(event string, props map[string]interface{}) *Event {
+	// Is it necessary to check props keys and find any keyword
+	// which violate with pre-defined keywords?
 	return &Event{
 		Title: event,
 		Properties: props,
@@ -63,18 +64,55 @@ func NewEvent(event string, props map[string]string) *Event {
 }
 
 type UpdateOperation struct {
+	Token string `json:"$token"`
+	DistinctID string `json:"$distinct_id"`
+	IP string `json:"$ip,omitempty"`
+	Time uint `json:"$time,omitempty"`
+	IgnoreTime bool `json:"$ignore_time,omitempty"`
+	IgnoreAlias bool `json:"$ignore_alias,omitempty"`
+	SetProperties map[string]interface{} `json:"$set,omitempty"`
+	SetOnceProperties map[string]interface{} `json:"$set_once,omitempty"`
+	AddProperties map[string]interface{} `json:"$add,omitempty"`
+	UnsetProperties []string `json:"$unset,omitempty"`
+	RemoveProperties map[string]interface{} `json:"$remove,omitempty"`
+	UnionProperties map[string]map[string]interface{} `json:"$union,omitempty"`
 }
 
-func NewSetOperation() *UpdateOperation{
-	return &UpdateOperation{}
+func NewSetOperation(properties map[string]interface{}) *UpdateOperation{
+	return &UpdateOperation{
+		SetProperties: properties,
+	}
 }
 
-func NewAddOperation() *UpdateOperation{
-	return &UpdateOperation{}
+func NewSetOnceOperation(properties map[string]interface{}) *UpdateOperation{
+	return &UpdateOperation{
+		SetOnceProperties: properties,
+	}
 }
 
-func NewDeleteOperation() *UpdateOperation{
-	return &UpdateOperation{}
+func NewAddOperation(properties map[string]interface{}) *UpdateOperation{
+	return &UpdateOperation{
+		AddProperties: properties,
+	}
+}
+
+func NewUnsetOperation(propertyNames []string) *UpdateOperation{
+	return &UpdateOperation{
+		UnsetProperties: propertyNames,
+	}
+}
+
+func NewRemovalOperation(properties map[string]interface{}) *UpdateOperation{
+	return &UpdateOperation{
+		RemoveProperties: properties,
+	}
+}
+
+// TODO Constructor for Union Updation Operation
+
+func (u *UpdateOperation) JSON() string {
+	j, _ := json.Marshal(u)
+	return string(j)
 }
 
 
