@@ -34,20 +34,43 @@ func TestClient_Track(t *testing.T) {
 }
 
 func TestUpdateOperation_JSON(t *testing.T) {
-	operation := NewSetOperation(map[string]interface{}{"test": "testing"})
+	operation := NewSetOperation("1", map[string]interface{}{"test": "testing"})
 	operation.IgnoreAlias = true
 	operation.IgnoreTime = false
-	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"\",\"$ignore_alias\":true,\"$set\":{\"test\":\"testing\"}}", operation.JSON())
+	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$ignore_alias\":true,\"$set\":{\"test\":\"testing\"}}", operation.JSON())
 }
 
 func TestNewAddOperation(t *testing.T) {
-	operation := NewAddOperation(map[string]interface{}{"test": "testing"})
-	operation.DistinctID = "1"
+	operation := NewAddOperation("1", map[string]interface{}{"test": "testing"})
 	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$add\":{\"test\":\"testing\"}}", operation.JSON())
 }
 
 func TestNewSetOperation(t *testing.T) {
-	operation := NewSetOperation(map[string]interface{}{"test": "testing"})
-	operation.DistinctID = "2"
+	operation := NewSetOperation("2", map[string]interface{}{"test": "testing"})
 	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"2\",\"$set\":{\"test\":\"testing\"}}", operation.JSON())
+}
+
+func TestNewSetOnceOperation(t *testing.T) {
+	operation := NewSetOnceOperation("1", map[string]interface{}{"test": "testing"})
+	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$set_once\":{\"test\":\"testing\"}}", operation.JSON())
+}
+
+func TestNewAppendOperation(t *testing.T) {
+	operation := NewAppendOperation("1", map[string]interface{}{"powertest": "power!!!"})
+	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$append\":{\"powertest\":\"power!!!\"}}", operation.JSON())
+}
+
+func TestNewUnsetOperation(t *testing.T) {
+	operation := NewUnsetOperation("1", []string{"test","testing"})
+	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$unset\":[\"test\",\"testing\"]}", operation.JSON())
+}
+
+func TestRemovalOperation(t *testing.T) {
+	operation := NewUnsetOperation("1", []string{"test","testing"})
+	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$unset\":[\"test\",\"testing\"]}", operation.JSON())
+}
+
+func TestNewDeleteOperation(t *testing.T) {
+	operation := NewDeleteOperation("1")
+	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$delete\":\"\"}", operation.JSON())
 }

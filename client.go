@@ -73,42 +73,64 @@ type UpdateOperation struct {
 	SetProperties map[string]interface{} `json:"$set,omitempty"`
 	SetOnceProperties map[string]interface{} `json:"$set_once,omitempty"`
 	AddProperties map[string]interface{} `json:"$add,omitempty"`
+	AppendProperties map[string]interface{} `json:"$append,omitempty"`
 	UnsetProperties []string `json:"$unset,omitempty"`
-	RemoveProperties map[string]interface{} `json:"$remove,omitempty"`
+	RemoveProperties map[string]map[string]interface{} `json:"$remove,omitempty"`
 	UnionProperties map[string]map[string]interface{} `json:"$union,omitempty"`
+	Delete *string `json:"$delete,omitempty"`
 }
 
-func NewSetOperation(properties map[string]interface{}) *UpdateOperation{
+func NewSetOperation(distinctID string, properties map[string]interface{}) *UpdateOperation{
 	return &UpdateOperation{
+		DistinctID: distinctID,
 		SetProperties: properties,
 	}
 }
 
-func NewSetOnceOperation(properties map[string]interface{}) *UpdateOperation{
+func NewSetOnceOperation(distinctID string, properties map[string]interface{}) *UpdateOperation{
 	return &UpdateOperation{
+		DistinctID: distinctID,
 		SetOnceProperties: properties,
 	}
 }
 
-func NewAddOperation(properties map[string]interface{}) *UpdateOperation{
+func NewAddOperation(distinctID string, properties map[string]interface{}) *UpdateOperation{
 	return &UpdateOperation{
+		DistinctID: distinctID,
 		AddProperties: properties,
 	}
 }
 
-func NewUnsetOperation(propertyNames []string) *UpdateOperation{
+func NewAppendOperation(distinctID string, properties map[string]interface{}) *UpdateOperation{
 	return &UpdateOperation{
+		DistinctID: distinctID,
+		AppendProperties: properties,
+	}
+}
+
+func NewUnsetOperation(distinctID string, propertyNames []string) *UpdateOperation{
+	return &UpdateOperation{
+		DistinctID: distinctID,
 		UnsetProperties: propertyNames,
 	}
 }
 
-func NewRemovalOperation(properties map[string]interface{}) *UpdateOperation{
-	return &UpdateOperation{
-		RemoveProperties: properties,
-	}
-}
+// TODO Constructor for Remove Operation
+//func NewRemovalOperation(distinctID string, properties map[string]interface{}) *UpdateOperation{
+//	return &UpdateOperation{
+//		DistinctID: distinctID,
+//		RemoveProperties: properties,
+//	}
+//}
 
 // TODO Constructor for Union Updation Operation
+
+func NewDeleteOperation(distinctID string) *UpdateOperation{
+	return &UpdateOperation{
+		DistinctID: distinctID,
+		Delete: new(string),
+	}
+}
 
 func (u *UpdateOperation) JSON() string {
 	j, _ := json.Marshal(u)
