@@ -230,18 +230,33 @@ func (c Client) Track(e *Event) (success bool, err error) {
 	e.Properties["token"] = c.token
 	req := fmt.Sprintf("%s?data=%s", TrackingURL, base64.StdEncoding.EncodeToString([]byte(e.JSON())))
 	resp, err := http.Get(req)
-	if err != nil {
-		return false, err
+	if success = err != nil; !success {
+		return
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err = resp.Body.Close()
+	}()
 	respBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return false, err
+	if success = err != nil; !success  {
+		return
 	}
-	if string(respBody) == "1" {
-		return true, nil
-	}
-	return false, nil
+	success = string(respBody) == "1"
+	return
 }
 
-func (c Client) Update(id string, u *UpdateOperation) {}
+func (c Client) Update(id string, u UpdateOperation) (success bool, err error) {
+	req := fmt.Sprintf("%s?data=%s", UpdateURL, base64.StdEncoding.EncodeToString([]byte(u.JSON())))
+	resp, err := http.Get(req)
+	if success = err != nil; !success {
+		return
+	}
+	defer func() {
+		err = resp.Body.Close()
+	}()
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if success = err != nil; !success {
+		return
+	}
+	success = string(respBody) == "1"
+	return
+}

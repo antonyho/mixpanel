@@ -33,6 +33,31 @@ func TestClient_Track(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestClient_Update(t *testing.T) {
+	viper.SetEnvPrefix("mixpanel")
+	viper.AutomaticEnv()
+	viper.AllowEmptyEnv(true)
+	token := viper.Get("token")
+	if token == nil {
+		t.Fatalf("Mixpanel Token is not provided for the test. You can add MIXPANEL_TOKEN to your environment variable for the test.")
+	}
+	client := NewClient(token.(string))
+
+	props := map[string]interface{}{"test": "testing"}
+	update := NewAddOperation("7537", props)
+	_, err := client.Update("7537", update)
+	assert.NoError(t, err)
+}
+
+
+func TestUpdateOperation_JSON(t *testing.T) {
+	operation := NewSetOperation("1", map[string]interface{}{"test": "testing"})
+	operation.(*SetOperation).IgnoreAlias = true
+	operation.(*SetOperation).IgnoreTime = false
+
+	assert.EqualValues(t, "{\"$token\":\"\",\"$distinct_id\":\"1\",\"$ignore_alias\":true,\"$set\":{\"test\":\"testing\"}}", UpdateOperation(operation).JSON())
+}
+
 func TestSetOperation_JSON(t *testing.T) {
 	operation := NewSetOperation("1", map[string]interface{}{"test": "testing"})
 	operation.(*SetOperation).IgnoreAlias = true
