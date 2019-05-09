@@ -2,65 +2,46 @@
 
 A Mixpanel client written in Go
 
+## Warning
+This project is under heavy development and not officially released yet.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+This library doesn't use 3rd party library for its core. But 3rd party library is being used for unit test. If you really want to run unit tests in the project.
 
 ```
-Give examples
+go get -u github.com/spf13/viper
+go get -u github.com/stretchr/testify/assert
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Use `go get` to get this library.
 
 ```
-Give the example
+go get -u github.com/antonyho/mixpanel
 ```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
 ```
-Give an example
+go test -v ./...
 ```
 
-### And coding style tests
+## Usage
 
-Explain what these tests test and why
+`import github.com/antonyho/mixpanel`
 
 ```
-Give an example
+token := "<Mixpanel token from Mixpanel setting page>"
+mp := mixpanel.NewClient(token)
+...
+result, err := mp.Track()
 ```
-
-## Deployment
-
-The client is implemented using RESTful with reference to the [official API document](https://developer.mixpanel.com/docs/http).
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
 ## Contributing
 
@@ -72,7 +53,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Antony Ho** - *Initial work* - [antonyho](https://github.com/antonyho)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
