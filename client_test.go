@@ -20,8 +20,9 @@ func TestClient_Track(t *testing.T) {
 	props := map[string]interface{}{"test": "testing"}
 	event := NewEvent("go-test", props)
 	event.DistinctID = "1"
-	_, err := client.Track(event)
+	result, err := client.Track(event)
 	assert.NoError(t, err)
+	assert.True(t, result)
 
 	richEvent := NewEvent("go-test", props)
 	richEvent.DistinctID = "2"
@@ -29,8 +30,9 @@ func TestClient_Track(t *testing.T) {
 	richEvent.IP = "8.8.8.8"
 	richEvent.GroupKey = "MPGO"
 	richEvent.GroupID = "MPGOTEST"
-	_, err = client.Track(richEvent)
+	result, err = client.Track(richEvent)
 	assert.NoError(t, err)
+	assert.True(t, result)
 }
 
 func TestClient_Update(t *testing.T) {
@@ -45,8 +47,9 @@ func TestClient_Update(t *testing.T) {
 
 	props := map[string]interface{}{"test": "testing"}
 	update := NewAddOperation("7537", props)
-	_, err := client.Update("7537", update)
+	result, err := client.Update("7537", update)
 	assert.NoError(t, err)
+	assert.True(t, result)
 }
 
 
