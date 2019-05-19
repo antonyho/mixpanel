@@ -44,11 +44,17 @@ go test -v ./...
 
 `import github.com/antonyho/mixpanel`
 
+Tracking an event
 ```
 token := "<Mixpanel token from Mixpanel setting page>"
 mp := mixpanel.NewClient(token)
-...
-result, err := mp.Track()
+event := NewEvent("go-test", props)
+event.DistinctID = "2"
+event.Time = uint(time.Now().Unix())
+event.IP = "8.8.8.8"
+event.GroupKey = "MPGO"
+event.GroupID = "MPGOTEST"
+result, err := mp.Track(event)
 ```
 
 ## Contributing
@@ -67,7 +73,7 @@ See also the list of [contributors](https://github.com/antonyho/mixpanel/graphs/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## TODO
 - [ ] GoDoc compatible Documentation
