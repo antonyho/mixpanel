@@ -28,6 +28,14 @@ go get -u github.com/antonyho/mixpanel
 
 ## Running the tests
 
+To thoroughly run all tests including Track and Engage, you have to set Mixpanel token to your environment variable. The test will make RESTful calls to your Mixpanel account.
+
+##### *Nix environment:
+```
+export MIXPANEL_TOKEN="<token string from Mixpanel>"
+```
+
+##### Starting the test:
 ```
 go test -v ./...
 ```
@@ -49,20 +57,21 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/antonyho/mixpanel/tags). 
 
 ## Authors
 
 * **Antony Ho** - *Initial work* - [antonyho](https://github.com/antonyho)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/antonyho/mixpanel/graphs/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+## TODO
+- [ ] GoDoc compatible Documentation
+- [ ] More test cases
+- [ ] Better instruction on README.md
+- [ ] License file
+- [ ] Version 1.0.0
