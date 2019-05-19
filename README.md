@@ -73,5 +73,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - [ ] GoDoc compatible Documentation
 - [ ] More test cases
 - [ ] Better instruction on README.md
-- [ ] License file
+- [x] License file
 - [ ] Version 1.0.0
