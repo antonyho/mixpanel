@@ -1,6 +1,8 @@
 # Go Mixpanel client
 
-A Mixpanel client written in Go
+[![GoDoc](https://godoc.org/github.com/antonyho/mixpanel?status.svg)](https://godoc.org/github.com/antonyho/mixpanel)
+
+An MIT-licensed Go client library for [Mixpanel](https://mixpanel.com/) 
 
 ## Warning
 This project is under heavy development and not officially released yet.

@@ -1,4 +1,4 @@
-// package mixpanel provides the API client for making Mixpanel API calls.
+// Package mixpanel provides the API client for making Mixpanel API calls.
 package mixpanel
 
 import (
